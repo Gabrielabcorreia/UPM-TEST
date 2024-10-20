@@ -18,16 +18,27 @@ function un_parallel_machine(instance)
 
     optimize!(model)
 
-    @assert JuMP.termination_status(model) == MOI.OPTIMAL "Erro: cannot find the optimal solution "
-    open("un_parallel_machine.txt", "w") do file 
-        write(file, "Minimum makespan: $(value(Cmax))\n")
+    return Cmax, x, model
+end
 
-        for i in 1:instance.m
-            for j in 1:instance.n
-                if value(x[i, j]) > 0.5
-                    write(file, "Job $j for the machine $i\n")
+function save_solution(Cmax, x, model)
+
+    if JuMP.termination_status(model) == MOI.OPTIMAL
+        open("un_parallel_machine.txt", "w") do file 
+            write(file, "Minimum makespan: $(value(Cmax))\n")
+
+            for i in 1:instance.m
+                for j in 1:instance.n
+                    if value(x[i, j]) > 0.5
+                        write(file, "$j, $i\n")
+                    end
                 end
             end
+        end
+    else
+        println("The optimal solution cannot be found")
+        open("un_parallel_machine.txt", "w") do file 
+            write(file, "Minimum makespan: $(value(Cmax))\n")
         end
     end
 end

@@ -6,4 +6,5 @@ address = "C:/Users/budun/OneDrive/Área de Trabalho/----/Estudos/GEEOC/PIBITI/C
 instance = UnPM.open_instance(address)
 
 UnPM.test_file(instance, 30, 200)
-un_parallel_machine(instance)
+Cmax, x, model = un_parallel_machine(instance)
+save_solution(Cmax, x, model)
